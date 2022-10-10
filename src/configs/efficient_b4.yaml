@@ -1,0 +1,20 @@
+model: tf_efficientnet_b4_ns
+pretrained: true
+num_classes: 10
+img_size: 380
+batch_size: 64
+
+# hflip: 0
+# vflip: 0
+# scale: [0.9, 1.0]  
+# ratio: [1.0,1.0]
+# color_jitter: 0
+
+opt: momentum
+lr: 1e-2
+weight-decay: 1e-4
+
+epochs: 120
+sched: step
+decay_epochs: 40
+decay_rate: 0.1

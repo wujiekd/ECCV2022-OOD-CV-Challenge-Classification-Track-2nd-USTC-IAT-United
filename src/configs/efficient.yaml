@@ -1,0 +1,20 @@
+model: tf_efficientnet_b7_ns
+pretrained: true
+num_classes: 1604
+
+
+apex_amp: true
+
+hflip: 0.5
+vflip: 0.5
+scale: [0.8, 1.0]
+color_jitter: 0.2
+
+epochs: 100
+sched: plateau
+patience_epochs: 1
+decay_rate: 0.5
+
+eval_metric: loss
+#decay_epochs: [7,13,19]
+decay_epochs: [7,13]

@@ -1,0 +1,25 @@
+model: swin_large_patch4_window7_224
+pretrained: true
+num_classes: 10
+img_size: 224
+batch_size: 32
+
+opt: momentum
+lr: 3e-4 # 1e-2
+weight-decay: 1e-4
+
+epochs: 120
+sched: step
+decay_epochs: 40
+decay_rate: 0.1
+
+
+cutmix: 1.0
+reprob: 0.5
+
+aa: corr-aug
+
+
+
+
+

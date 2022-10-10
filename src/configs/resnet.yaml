@@ -1,0 +1,13 @@
+model: resnet50
+pretrained: true
+num_classes: 10
+img_size: 224
+batch_size: 128
+
+lr: 0.1
+sched: multistep
+epochs: 50
+decay_epochs: [30, 40]
+
+mean: [0.5,0.5,0.5]
+std: [0.5,0.5,0.5]
