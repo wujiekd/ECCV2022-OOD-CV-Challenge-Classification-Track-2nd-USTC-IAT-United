@@ -1,4 +1,4 @@
-# ECCV2022-OOD-CV-Challenge-Classification-Track-2nd-Place-Program
+# ECCV2022-OOD-CV-Classification-Track-2nd-Place
 Competition Open Source Solutions
 
 
@@ -117,7 +117,7 @@ run src/mix_final.ipynb
 ```
 
 
-2. 3rd stage : train 1 model 
+3. 3rd stage : train 1 model 
 ```
 python -m torch.distributed.launch --master_port 145640 --nproc_per_node=4 train_final2.py -c configs/volo_d5_512.yaml \
         --output ../../output/volo/d5_512/v5
