@@ -39,117 +39,112 @@ train data and test data structure:
 Training sets and test sets are distributed with CSV labels corresponding to them.
 
 ### 2.2. run.
-Divided into three stages of training, the code files used are src/train.sh and src/mix_final.ipynb
+Divided into three stages of training, the code files used are src/train.sh, src/test.sh and src/mix_final.ipynb
+
+1. 1st stage : train 3 models and ensembel them to output 1st round Pseudo-labeling
+```
+python -m torch.distributed.launch --master_port 145640 --nproc_per_node=4 train.py -c configs/deit_large_384.yaml \
+        --output ../../output/deit/large_384/v7 \
+        --batchformer
 
 
-1.  we train a basic model by dividing the training set and verification set 9:1
-```
-python train.py ./Fungidata/DF20 -c configs/swin_large_384.yaml \
-        --freeze-layer 2 \
-        --batch-size 32 \
-        --lr 0.01 \
-        --decay-rate 0.9 \
-        --output ./output/Swin-TF/DF20/freeze_layer_2
+python -m torch.distributed.launch --master_port 145647 --nproc_per_node=2 train.py -c configs/convnext_large.yaml \
+        --output ../../output/convnext/large_224/v5 \
+        --model-ema
+
+python -m torch.distributed.launch --master_port 145640 --nproc_per_node=4 train.py -c configs/volo_d5_512.yaml \
+        --output ../../output/volo/d5_512/v3
+
+python test_final.py --model deit3_large_patch16_384 \
+              --num-gpu 4 \
+              --img-size 384 \
+              --num-classes 10 \
+              --batch-size 200 \
+              --checkpoint ../../output/deit/large_384/v7/20220913-101337-deit3_large_patch16_384-384/checkpoint-37.pth.tar \
+              --output_path ../final_result/deit_large_384_bf/ \
+              --scoreoutput_path ../final_result/deit_large_384_bf/
+
+python test_final.py --model volo_d5_512 \
+              --num-gpu 4 \
+              --img-size 512 \
+              --num-classes 10 \
+              --batch-size 80 \
+              --checkpoint ../../output/volo/d5_512/v3/20220910-202730-volo_d5_512-512/checkpoint-12.pth.tar \
+              --output_path ../final_result/volo_d5_512/ \
+              --scoreoutput_path ../final_result/volo_d5_512/
+
+python test_final.py --model convnext_large \
+              --num-gpu 2 \
+              --img-size 224 \
+              --num-classes 10 \
+              --batch-size 200 \
+              --checkpoint ../../output/convnext/large_224/v5/20220902-151019-convnext_large-224/checkpoint-45.pth.tar \
+              --output_path ../final_result/convnext_large_224/ \
+              --scoreoutput_path ../final_result/convnext_large_224/
+
+run src/mix_final.ipynb
 ```
 
-2. Add data augment and continue fine-tuning
+2. 2nd stage : train 2 models and ensembel them to output 2nd round Pseudo-labeling
 ```
-python train.py ./Fungidata/DF20 -c configs/swin_large_384.yaml \
-        --output ./output/Swin-TF/DF20/All_aug/freeze_layer_2 \
-        --initial-checkpoint ./output/Swin-TF/DF20/freeze_layer_2/20220430-123449-swin_large_patch4_window12_384-384/Best_Top1-ACC.pth.tar \
-        --freeze-layer 2 \
-        --lr 0.001 \
-        --batch-size 32 \
-        --warmup-epochs 0 \
-        --cutmix 1 \
-        --color-jitter 0.4 \
-        --reprob 0.25 \
-        --aa trivial \
-        --decay-rate 0.9
+python -m torch.distributed.launch --master_port 145640 --nproc_per_node=4 train_final.py -c configs/deit_large_384.yaml \
+        --output ../../output/deit/large_384/v11 \
+        --batchformer
+ 
+python -m torch.distributed.launch --master_port 145647 --nproc_per_node=2 train_final.py -c configs/convnext_large.yaml \
+        --output ../../output/convnext/large_224/v14 \
+        --model-ema
+ 
+python test_final.py --model deit3_large_patch16_384 \
+              --num-gpu 4 \
+              --img-size 384 \
+              --num-classes 10 \
+              --batch-size 200 \
+              --checkpoint ../../output/deit/large_384/v11/20220928-204730-deit3_large_patch16_384-384/checkpoint-13.pth.tar \
+              --output_path ../final_result/deit_large_384_bf_pseduo_5_epoch13/ \
+              --scoreoutput_path ../final_result/deit_large_384_bf_pseduo_5_epoch13/
+
+python test_final.py --model convnext_large \
+              --num-gpu 2 \
+              --img-size 224 \
+              --num-classes 10 \
+              --batch-size 200 \
+              --checkpoint ../../output/convnext/large_224/v14/20220927-165319-convnext_large-224/checkpoint-71.pth.tar \
+              --output_path ../final_result/convnext_large_pseduo_5/ \
+              --scoreoutput_path ../final_result/convnext_large_pseduo_5/
+              
+run src/mix_final.ipynb
 ```
 
-3. Modify the loss function and continue fine-tuning
+
+2. 3rd stage : train 1 model 
 ```
-python train.py ./Fungidata/DF20 -c configs/swin_large_384.yaml \
-        --output ./output/Swin-TF/DF20/new_loss/freeze_layer_2 \
-        --initial-checkpoint ./output/Swin-TF/DF20/All_aug/freeze_layer_2/20220430-123449-swin_large_patch4_window12_384-384/Best_Top1-ACC.pth.tar \
-        --freeze-layer 2 \
-        --lr 0.001 \
-        --batch-size 32 \
-        --warmup-epochs 0 \
-        --cutmix 1 \
-        --color-jitter 0.4 \
-        --reprob 0.25 \
-        --aa trivial \
-        --decay-rate 0.9 \
-        --Focalloss
+python -m torch.distributed.launch --master_port 145640 --nproc_per_node=4 train_final2.py -c configs/volo_d5_512.yaml \
+        --output ../../output/volo/d5_512/v5
+
+python test_final.py --model volo_d5_512 \
+              --num-gpu 4 \
+              --img-size 512 \
+              --num-classes 10 \
+              --batch-size 80 \
+              --checkpoint ../../output/volo/d5_512/v5/20220930-080545-volo_d5_512-512/checkpoint-6.pth.tar \
+              --output_path ../final_result/volo_d5_512_second_8/ \
+              --scoreoutput_path ../final_result/volo_d5_512_second_8/
 ```
 
-4. Fine-tuning with full data sets
-```
-python train_all.py ./Fungidata/DF20 -c configs/swin_large_384.yaml \
-         --batch-size 32 \
-         --img-size 384 \
-         --output ./output/Swin-TF/DF20/All_data/swin_large_384 \
-         --freeze-layer 2 \
-         --initial-checkpoint ./output/Swin-TF/DF20/new_loss/freeze_layer_2/20220502-114033-swin_large_patch4_window12_384-384/Best_Top1-ACC.pth.tar \
-         --lr 0.001 \
-         --cutmix 1 \
-         --color-jitter 0.4 \
-         --reprob 0.25 \
-         --aa trivial \
-         --decay-rate 0.1 \
-         --warmup-epochs 0 \
-         --epochs 24 \
-         --sched multistep \
-         --checkpoint-hist 24 \
-         --Focalloss
-```
 
-5. Two-stage training
-```
-python train_all.py ./Fungidata/DF20 -c configs/swin_large_384.yaml \
-         --batch-size 32 \
-         --img-size 384 \
-         --output ./output/Swin-TF/DF20/two_stage/swin_large_384 \
-         --freeze-layer 2 \
-         --initial-checkpoint ./output/Swin-TF/DF20/All_data/freeze_layer_2/20220504-115867-swin_large_patch4_window12_384-384/Best_Top1-ACC.pth.tar \
-         --lr 0.001 \
-         --cutmix 1 \
-         --color-jitter 0.4 \
-         --reprob 0.25 \
-         --aa trivial \
-         --decay-rate 0.1 \
-         --warmup-epochs 0 \
-         --epochs 5 \
-         --sched multistep \
-         --Focalloss
-```
-
-### 2.4. multi-gpus
-change train.sh
-```
-python -m torch.distributed.launch --nproc_per_node=4 train_all.py
-```  
 
 ## 3. Evaluation
-for details, see test.sh
+for details, see src/mix_final.ipynb
 ```
-sh test.sh
+run src/mix_final.ipynb
 ```
 
-Use the sh test.sh command to execute the reasoning file (the checkpoint in the google cloud disk will be used, please download it in 5. Challenge's final checkpoints and logits)
 
-## 4. Model Ensemble
-run model_ensemble.ipynb
-
-Execute 3. Evaluation to get the logits file required by model_ensemble.ipynb (you can also download it directly from google cloud disk, see 5. Challenge's final checkpoints and logits for details)
-
-## 5. Challenge's final checkpoints and logits
+## 4. Challenge's final checkpoints
 It can be downloaded from Google Cloud Disk: https://drive.google.com/file/d/1v9SlsjXXKI5kizg9BTMWfA9faaawAgpv/view?usp=sharing
 
-  
-It can be directly used for model ensemble reasoning.
+It can be directly used for model ensemble reasoning and get final result.
 
 ### Acknowledgment
 
