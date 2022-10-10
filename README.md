@@ -142,7 +142,7 @@ run src/mix_final.ipynb
 
 
 ## 4. Challenge's final checkpoints
-It can be downloaded from Google Cloud Disk: https://drive.google.com/file/d/1v9SlsjXXKI5kizg9BTMWfA9faaawAgpv/view?usp=sharing
+It can be downloaded from Google Cloud Disk: https://drive.google.com/file/d/1nx5pE1Axj-tzKkAWtVt9HQu7WF1PbjfF/view?usp=sharing
 
 It can be directly used for model ensemble reasoning and get final result.
 
