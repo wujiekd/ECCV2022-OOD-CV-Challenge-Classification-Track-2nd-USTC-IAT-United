@@ -1,4 +1,4 @@
-# ECCV2022-OOD-CV-Classification-Track-2nd-Place
+# ECCV2022-OOD-CV-Challenge-Classification-Track-USTC-IAT-United
 Competition Open Source Solutions
 
 
