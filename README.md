@@ -1,6 +1,9 @@
 # ECCV2022-OOD-CV-Challenge-Classification-Track-USTC-IAT-United
 Competition Open Source Solutions
 
+![e920f38a352a4c2542cb5831dbd836d](https://user-images.githubusercontent.com/49955700/199008592-0f9de187-715a-48d7-8ae1-2ed3c35e822e.jpg)
+
+
 
 ## 1. Environment setting 
 
