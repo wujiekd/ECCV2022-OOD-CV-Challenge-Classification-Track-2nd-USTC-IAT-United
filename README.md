@@ -2,8 +2,7 @@
 Competition Open Source Solutions
 
 Competition Link：http://www.ood-cv.org/
-![e920f38a352a4c2542cb5831dbd836d](https://user-images.githubusercontent.com/49955700/199008592-0f9de187-715a-48d7-8ae1-2ed3c35e822e.jpg)
-
+![2ea2f8e3f7706dadaa4f99da7559757](https://user-images.githubusercontent.com/49955700/199053987-806eea89-80cf-45c4-ad87-98c76a16fd72.jpg)
 
 
 ## 1. Environment setting 
