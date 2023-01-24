@@ -2,6 +2,8 @@
 Competition Open Source Solutions
 
 Competition Link：http://www.ood-cv.org/
+![image](https://user-images.githubusercontent.com/49955700/214233867-9ccb8227-715e-4390-b886-ab4fded65ba6.png)
+
 ![2ea2f8e3f7706dadaa4f99da7559757](https://user-images.githubusercontent.com/49955700/199053987-806eea89-80cf-45c4-ad87-98c76a16fd72.jpg)
 
 
