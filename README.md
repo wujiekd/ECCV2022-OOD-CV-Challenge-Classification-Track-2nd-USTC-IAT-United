@@ -23,7 +23,7 @@ In the classification track, we use only the OOD classification and detection da
 - [x] Ubuntu20.04
 - [x] macOS (CPU only)
 
-## 2. Train
+<!-- ## 2. Train
 - [x] Single GPU Training
 - [x] DataParallel (single machine multi-gpus)
 - [ ] DistributedDataParallel
@@ -147,10 +147,11 @@ run src/mix_final.ipynb
 
 
 ## 4. Challenge's final checkpoints
-<!-- It can be downloaded from Google Cloud Disk: https://drive.google.com/file/d/1nx5pE1Axj-tzKkAWtVt9HQu7WF1PbjfF/view?usp=sharing-->
+It can be downloaded from Google Cloud Disk: https://drive.google.com/file/d/1nx5pE1Axj-tzKkAWtVt9HQu7WF1PbjfF/view?usp=sharing
 
 It can be directly used for model ensemble reasoning and get final result.
 
 ### Acknowledgment
 
 * Thanks to [timm](https://github.com/rwightman/pytorch-image-models) for Pytorch implementation.
+-->
