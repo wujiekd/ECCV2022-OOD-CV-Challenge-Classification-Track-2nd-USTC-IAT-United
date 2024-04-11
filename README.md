@@ -23,7 +23,7 @@ In the classification track, we use only the OOD classification and detection da
 - [x] Ubuntu20.04
 - [x] macOS (CPU only)
 
-<!-- ## 2. Train
+## 2. Train
 - [x] Single GPU Training
 - [x] DataParallel (single machine multi-gpus)
 - [ ] DistributedDataParallel
@@ -150,4 +150,3 @@ run src/mix_final.ipynb
 ### Acknowledgment
 
 * Thanks to [timm](https://github.com/rwightman/pytorch-image-models) for Pytorch implementation.
--->
